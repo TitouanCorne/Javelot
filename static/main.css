@@ -1,0 +1,26 @@
+#username-form{
+    margin-top: 10px;
+}
+#play{ 
+    display: block;
+    margin : auto;
+}
+#continue, #stop{
+    margin-top: 10px; 
+
+}
+
+h2{
+    text-align: center;
+}
+
+p{
+    text-align: center;
+}
+
+#dices{
+    display: none;
+}
+#continuer{
+    display: none;
+}

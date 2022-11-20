@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+      <link rel="stylesheet" href="main.css" />
+      <title>JavelinGame</title>
+  </head>
+  <body>
+    <div class="container">
+        <div class="main">
+            <header class="h1 text-center">Lancer de Javelot</header>
+            
+            <!-- Accordéon pour les règles du jeu : -->
+            <div class="accordion accordion-flush" id="Deroulant_Regles">
+                <div class="accordion-item" theme-colors="Primary">
+                    <h2 class="accordion-header" id="rules">
+                        <button class="accordion-button collapsed text-bg-primary p-3" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Règles du jeu
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse text-bg-info p-3" aria-labelledby="rules" data-bs-parent="#Deroulant_Regles">
+                        <div class="accordion-body">
+                            Commencez par lancer les 6 dés. Écartez alors au moins un dé. Si vous le désirez, relancez tous les autres. Vous
+                            pouvez réitérer l’opération plusieurs fois, à la condition de toujours écarter au moins un dé à chaque coup. Mais
+                            attention : seuls les dés de valeur impaire peuvent être écartés. Essayez de conserver ainsi les dés de valeur
+                            élevée.
+                            À tout moment, vous pouvez décider d’interrompre vos lancers et de conclure là votre tentative. Par ailleurs une
+                            tentative s’achève automatiquement quand les six dés se trouvent écartés.
+                            Si, après un lancer, vous n’êtes plus en mesure d’écarter un nouveau dé parce que tous montrent une valeur paire,
+                            votre tentative se solde par un échec
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Demander le nom du joueur : -->
+            <div class="row" id="username-form">
+                <div class="col-md-8">
+                    <input class="form-control form-control-lg" type="text" id="nom_joueur" placeholder="Nom du joueur">
+                </div>
+                <div class="col-md-4 text-center">
+                    <input type="button" value="Valider" class="btn btn-primary" id="btn_lancement">
+                </div>
+                <p id="affiche_nom_joueur" class="col-md-4"> </p> <!--contiendra le nom du joueur -->
+                <p id="affiche_resultat" class="col-md-2"></p> <!--contiendra le résultat du joueur -->
+                <p id ="resultat" class="col-md-2"></p>
+                <p id="affiche_remainingDices" class="col-md-2"></p>
+                <p id="remainingDices" class="col-md-2"></p> 
+            </div>
+        </div>
+
+    </div>
+    <button class="btn btn-primary" disabled="true" id="play">Lancer les dés !</button>
+    <div id="dices_result" class="container">
+        <div id="dices">
+            <div class="row">
+                <div class="col-md" id="dice1"><p>Dé n°1</p>
+                    <h2 id="res1"></h2>
+                    <button class="btn btn-primary" id="choose1" disabled="true">Garder ce dé</button>
+                </div>
+                <div class="col-md" id="dice2"><p>Dé n°2</p>
+                    <h2 id="res2"></h2>
+                    <button class="btn btn-primary" id="choose2" disabled="true">Garder ce dé</button>
+                </div>
+                <div class="col-md" id="dice3"><p>Dé n°3</p>
+                    <h2 id="res3"></h2>
+                    <button class="btn btn-primary" id="choose3" disabled="true">Garder ce dé</button>
+                </div>
+                <div class="col-md" id="dice4"><p>Dé n°4</p>
+                    <h2 id="res4"></h2>
+                    <button class="btn btn-primary" id="choose4" disabled="true">Garder ce dé</button> 
+                </div>
+                <div class="col-md" id="dice5"><p>Dé n°5</p>
+                    <h2 id="res5"></h2>
+                    <button class="btn btn-primary" id="choose5" disabled="true">Garder ce dé</button> 
+                </div>
+                <div class="col-md" id="dice6"><p>Dé n°6</p>
+                    <h2 id="res6"></h2>
+                    <button class="btn btn-primary" id="choose6" disabled="true">Garder ce dé</button> 
+                </div>
+        </div>
+    </div>
+    <div class="row" id="continuer">
+        <button class="btn btn-primary col-md-3" disabled="true" id="continue">Relancer le(s) dé(s) restant(s) !</button>
+        <button class="btn btn-danger col-md-3" disabled="true" id="stop">Mettre fin au lancer</button>
+    </div>
+    <div>
+        <p id="end"></p>
+    </div>
+    
+        
+    <script>
+        var remainingDices = 6
+        var resultat = 0
+        
+
+        function affichage(res_dices){
+            switch(remainingDices){
+                case 6:
+                    document.querySelector("#res1").textContent = res_dices[0];
+                    document.querySelector("#res2").textContent = res_dices[1];
+                    document.querySelector("#res3").textContent = res_dices[2];
+                    document.querySelector("#res4").textContent = res_dices[3];
+                    document.querySelector("#res5").textContent = res_dices[4];
+                    document.querySelector("#res6").textContent = res_dices[5];
+                case 5:
+                    document.querySelector("#res1").textContent = res_dices[0];
+                    document.querySelector("#res2").textContent = res_dices[1];
+                    document.querySelector("#res3").textContent = res_dices[2];
+                    document.querySelector("#res4").textContent = res_dices[3];
+                    document.querySelector("#res5").textContent = res_dices[4];
+                case 4:
+                    document.querySelector("#res1").textContent = res_dices[0];
+                    document.querySelector("#res2").textContent = res_dices[1];
+                    document.querySelector("#res3").textContent = res_dices[2];
+                    document.querySelector("#res4").textContent = res_dices[3];
+                case 3:
+                    document.querySelector("#res1").textContent = res_dices[0];
+                    document.querySelector("#res2").textContent = res_dices[1];
+                    document.querySelector("#res3").textContent = res_dices[2];
+                case 2:
+                    document.querySelector("#res1").textContent = res_dices[0];
+                    document.querySelector("#res2").textContent = res_dices[1];
+                case 1:
+                    document.querySelector("#res1").textContent = res_dices[0];
+            }
+        };
+
+        function majNombreDe(){
+            switch(remainingDices){
+                case 5 :
+                    document.querySelector("#dice6").style.display = none;
+                case 4 :
+                    document.querySelector("#dice6").style.display = none;
+                    document.querySelector("#dice5").style.display = none;
+            }
+        }
+
+        function end(){
+            document.querySelector("#end").textContent = nom_joueur.value +" a marqué " + resultat + " point(s)";
+        }
+
+        
+
+
+
+        //affichage du nom du joueur
+
+        document.querySelector("#btn_lancement").addEventListener("click", (event) => {
+            if(nom_joueur.value != ""){
+                document.getElementById("affiche_nom_joueur").textContent = "Nom du joueur : " + nom_joueur.value,
+                document.getElementById("affiche_resultat").textContent = "Résultat en cours : ",
+                document.getElementById("resultat").textContent = resultat
+                document.getElementById("affiche_remainingDices").textContent =  "dé(s) restant(s) : ";
+                document.getElementById("remainingDices").textContent =  "6";
+                document.querySelector("#btn_lancement").style.display = 'none'; //faire disparaître le bouton "valider"
+                document.querySelector("#nom_joueur").style.display = 'none'; //faire disparaître
+                document.querySelector("#play").disabled = false;
+            }
+            else{
+                alert("Veuillez renseigner votre nom")
+            }
+        })
+
+        document.querySelector("#play").addEventListener("click", (event) =>{
+                document.querySelector("#play").style.display = 'none'; //enlever le bouton
+                nombre_dé_à_lancer = remainingDices
+                
+                fetch('/remainingDices/?valeur=' + nombre_dé_à_lancer)
+                    .then(response => response.json())
+                    .then(data => {
+                        res_dices = data.res_dices 
+                        console.log(data)
+                        affichage(res_dices)
+                        document.querySelector("#dices").style.display="block"; //faire apparaître
+                        document.querySelector("#continuer").style.display="block";
+                        document.querySelector("#choose1").disabled = false;
+                        document.querySelector("#choose2").disabled = false;
+                        document.querySelector("#choose3").disabled = false;
+                        document.querySelector("#choose4").disabled = false;
+                        document.querySelector("#choose5").disabled = false;
+                        document.querySelector("#choose6").disabled = false;
+                    })
+                    .catch(error => {
+                        console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+                    })  
+            })
+        
+        document.querySelector("#choose1").addEventListener("click", (event) =>{
+            n = document.querySelector("#res1").innerText
+            console.log(n)
+            fetch('/choose1/?valeur=' + n)
+                .then(response => response.json())
+                .then(data => {
+                    freeze = data.freeze
+                    score_de = data.score_de
+                    console.log(freeze)
+                    if(freeze == true){
+                        remainingDices = remainingDices - 1
+                        document.getElementById("remainingDices").textContent =  remainingDices
+                        resultat = resultat + score_de
+                        console.log(resultat)
+                        document.getElementById("resultat").textContent =  resultat
+                        document.querySelector("#stop").disabled = false;
+                        document.querySelector("#continue").disabled = false;
+                    }
+                    else{
+                        alert("Ce n'est pas une valeur impaire !")
+                    }
+                })
+                .catch(error => {
+                    console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+                })
+        })
+
+    //PASSER A UN AUTRE LANCER
+    document.querySelector("#continue").addEventListener("click", (event) =>{
+        fetch('/remainingDices/?valeur=' + nombre_dé_à_lancer)
+            .then(response => response.json())
+            .then(data => {
+                res_dices = data.res_dices 
+                console.log(data)
+                affichage(res_dices)
+                majNombreDe()
+            })
+            .catch(error => {
+                console.log('Il y a eu un problème avec l\'opération fetch: ' + error.message);
+            })        
+    })
+       
+    //STOPER LE JEU
+    document.querySelector("#stop").addEventListener("click", (event) =>{
+        end()
+    })
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>
